@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Network Scanner</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
+</head>
+<body>
+   <center>
+    <div class="jumbotron" >
+        <h1 class="display-4">Scan your Network</h1>
+        <div class="col-md-4 p-2" >
+            <form method="post" class="mb-4">
+                <div class="form-group">
+                    <label for="ip_range">Enter IP Range:</label>
+                    <input type="text" id="ip_range" name="ip_range" class="form-control" placeholder="Example: 192.168.1.0/24" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Scan</button>
+            </form>
+           <div >Save scan to file: <button>.pdf</button></div>
+        </div>
+        
+    </div>
+   </center>
+    <div class="container-fluid">
+        
+        <div class="row" style="justify-content: center;">
+            <div class="col-md-6 text-center">
+                <b>Network map:</b>
+                <img src="{{ graph_image }}"  >
+            </div>
+            <div class="col-md-6 text-center"  >
+                <b><p>Devices Found are listed here:</p></b>
+                <ul class="list-group">
+                    {% for device in devices %}
+                    <li class="list-group-item">
+                        IP: {{ device['ip'] }} - MAC: {{ device['mac'] }} - Company: {{ device['company'] }} - Host Status: {{ device['status'] }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
