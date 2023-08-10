@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request
-from scapy.all import *
-import requests
+from flask import Flask, render_template, request, send_file
+from io import BytesIO
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet
 import networkx as nx
-import matplotlib.pyplot as plt  
+import matplotlib.pyplot as plt
+import requests
+from scapy.all import *
+from datetime import datetime
+import time 
 
 
 app = Flask(__name__)
@@ -55,8 +61,9 @@ def index():
 
     if request.method == 'POST':
         target_ip_range = request.form['ip_range']
+      
         devices, graph = scan_network(target_ip_range)
-
+    
         graph_pos = nx.circular_layout(graph)
         center_shift = (0.6, 0.5)  # Shift the positions towards the center
         graph_pos = {node: (pos[0] * center_shift[0], pos[1] * center_shift[1]) for node, pos in graph_pos.items()}
@@ -77,6 +84,9 @@ def index():
         graph_image = graph_image_path  
 
     return render_template('index.html', devices=devices, graph_image=graph_image)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

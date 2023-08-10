@@ -5,19 +5,42 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
 </head>
+<style>
+    .loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
 <body>
    <center>
     <div class="jumbotron" >
         <h1 class="display-4">Scan your Network</h1>
         <div class="col-md-4 p-2" >
-            <form method="post" class="mb-4">
+            <form method="post"  class="mb-4">
                 <div class="form-group">
                     <label for="ip_range">Enter IP Range:</label>
                     <input type="text" id="ip_range" name="ip_range" class="form-control" placeholder="Example: 192.168.1.0/24" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Scan</button>
             </form>
-           <div >Save scan to file: <button>.pdf</button></div>
+            <form action="/download" method="post">
+                <input type="hidden" name="ip_range" value="{{ request.form['ip_range'] }}">
+            </form>
         </div>
         
     </div>
@@ -29,6 +52,7 @@
                 <b>Network map:</b>
                 <img src="{{ graph_image }}"  >
             </div>
+            <div id="loader" class="loader"></div>
             <div class="col-md-6 text-center"  >
                 <b><p>Devices Found are listed here:</p></b>
                 <ul class="list-group">
@@ -41,6 +65,26 @@
             </div>
         </div>
     </div>
-
+    <script>
+        // Define the JavaScript functions to show and hide the loader
+        function showLoader() {
+            document.getElementById("loader").style.display = "block";
+        }
+    
+        function hideLoader() {
+            document.getElementById("loader").style.display = "none";
+        }
+    
+        // Add event listener to the form submission
+        document.querySelector('form').addEventListener('submit', function() {
+            showLoader(); // Show the loader when the form is submitted
+        });
+    
+        // Implement a function to handle graph image generation
+        function generateGraphImage() {
+            // ... Your graph image generation logic ...
+            hideLoader(); // Hide the loader when the image is generated
+        }
+    </script>
 </body>
 </html>
